@@ -193,33 +193,34 @@ const ClientForm = () => {
     );
   }
 
-  return (
-    <Container maxWidth="md">
+return (
+    <Container maxWidth="md" sx={{ px: isMobile ? 1 : 2, py: isMobile ? 1 : 2 }}>
       <Box mt={2} mb={2}>
-        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clientes')}>
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/clientes')} size={isMobile ? "small" : "medium"}>
           Regresar
         </Button>
       </Box>
       
-      <Paper sx={{ p: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h5">
+      <Paper sx={{ p: isMobile ? 2 : 3 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3} flexWrap="wrap" gap={2}>
+          <Typography variant={isMobile ? "h6" : "h5"}>
             {id ? 'Editar Cliente' : 'Nuevo Cliente'}
           </Typography>
           {imagePreview && (
             <Box>
-              <img src={imagePreview} alt="Preview" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover' }} />
+              <img src={imagePreview} alt="Preview" style={{ width: isMobile ? 60 : 80, height: isMobile ? 60 : 80, borderRadius: '50%', objectFit: 'cover' }} />
             </Box>
           )}
         </Box>
         
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
+          <Grid container spacing={isMobile ? 1 : 2}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Nombre *"
                 name="nombre"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.nombre}
                 onChange={handleChange}
                 required
@@ -227,11 +228,12 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Apellidos *"
                 name="apellidos"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.apellidos}
                 onChange={handleChange}
                 required
@@ -239,11 +241,12 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Identificación *"
                 name="identificacion"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.identificacion}
                 onChange={handleChange}
                 required
@@ -251,11 +254,12 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Teléfono Celular *"
                 name="telefonoCelular"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.telefonoCelular}
                 onChange={handleChange}
                 required
@@ -263,11 +267,12 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Otro Teléfono"
                 name="otroTelefono"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.otroTelefono}
                 onChange={handleChange}
                 inputProps={{ maxLength: 20 }}
@@ -279,6 +284,7 @@ const ClientForm = () => {
                 label="Dirección *"
                 name="direccion"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.direccion}
                 onChange={handleChange}
                 required
@@ -286,12 +292,13 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Fecha de Nacimiento *"
                 type="date"
                 name="fnAcimiento"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 InputLabelProps={{ shrink: true }}
                 value={form.fnAcimiento}
                 onChange={handleChange}
@@ -299,12 +306,13 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Fecha de Afiliación *"
                 type="date"
                 name="fAficion"
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 InputLabelProps={{ shrink: true }}
                 value={form.fAficion}
                 onChange={handleChange}
@@ -312,34 +320,22 @@ const ClientForm = () => {
               />
             </Grid>
             
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth required>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
                 <InputLabel>Sexo *</InputLabel>
-                <Select
-                  name="sexo"
-                  value={form.sexo}
-                  onChange={handleChange}
-                  label="Sexo *"
-                >
+                <Select name="sexo" value={form.sexo} onChange={handleChange} label="Sexo *">
                   <MenuItem value="M">Masculino</MenuItem>
                   <MenuItem value="F">Femenino</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth required>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
                 <InputLabel>Intereses *</InputLabel>
-                <Select
-                  name="interesesFK"
-                  value={form.interesesFK}
-                  onChange={handleChange}
-                  label="Intereses *"
-                >
+                <Select name="interesesFK" value={form.interesesFK} onChange={handleChange} label="Intereses *">
                   {interests.map((interest) => (
-                    <MenuItem key={interest.id} value={interest.id}>
-                      {interest.nombre}
-                    </MenuItem>
+                    <MenuItem key={interest.id} value={interest.id}>{interest.nombre}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -350,8 +346,9 @@ const ClientForm = () => {
                 label="Reseña Personal *"
                 name="resenaPersonal"
                 multiline
-                rows={3}
+                rows={isMobile ? 2 : 3}
                 fullWidth
+                size={isMobile ? "small" : "medium"}
                 value={form.resenaPersonal}
                 onChange={handleChange}
                 required
@@ -361,48 +358,28 @@ const ClientForm = () => {
             </Grid>
             
             <Grid item xs={12}>
-              <Button variant="outlined" component="label">
+              <Button variant="outlined" component="label" size={isMobile ? "small" : "medium"}>
                 {form.imagen ? 'Cambiar Imagen' : 'Subir Imagen (Opcional)'}
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleImageChange}
-                />
+                <input type="file" accept="image/*" hidden onChange={handleImageChange} />
               </Button>
-              {imagePreview && (
-                <Box mt={1}>
-                  <Typography variant="caption">Imagen cargada</Typography>
-                </Box>
-              )}
             </Grid>
             
             <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                sx={{ mr: 2 }}
-              >
-                {loading ? <CircularProgress size={24} /> : 'Guardar'}
-              </Button>
-              <Button variant="outlined" onClick={() => navigate('/clientes')}>
-                Cancelar
-              </Button>
+              <Box display="flex" gap={2} flexWrap="wrap">
+                <Button type="submit" variant="contained" color="primary" disabled={loading} size={isMobile ? "medium" : "large"}>
+                  {loading ? <CircularProgress size={24} /> : 'Guardar'}
+                </Button>
+                <Button variant="outlined" onClick={() => navigate('/clientes')} size={isMobile ? "medium" : "large"}>
+                  Cancelar
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </form>
       </Paper>
       
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-      >
-        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-          {snackbar.message}
-        </Alert>
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
     </Container>
   );

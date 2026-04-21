@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Container, TextField, Button, Typography, Box, Alert, Paper } from '@mui/material';
+import { 
+  Container, TextField, Button, Typography, Box, Alert, Paper,
+  useMediaQuery, useTheme 
+} from '@mui/material';
 
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -44,18 +49,72 @@ const Register = () => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
-        <Typography variant="h5" align="center" gutterBottom>Registro</Typography>
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+    <Container 
+      maxWidth="xs" 
+      sx={{ 
+        px: isMobile ? 2 : 3,
+        py: isMobile ? 4 : 8
+      }}
+    >
+      <Paper 
+        elevation={3} 
+        sx={{ 
+          p: isMobile ? 3 : 4, 
+          mt: isMobile ? 4 : 8,
+          borderRadius: isMobile ? 2 : 1
+        }}
+      >
+        <Typography variant={isMobile ? "h6" : "h5"} align="center" gutterBottom>
+          Registro
+        </Typography>
+        {error && <Alert severity="error" sx={{ mb: 2, fontSize: isMobile ? '0.875rem' : '1rem' }}>{error}</Alert>}
+        {success && <Alert severity="success" sx={{ mb: 2, fontSize: isMobile ? '0.875rem' : '1rem' }}>{success}</Alert>}
         <form onSubmit={handleSubmit}>
-          <TextField name="username" label="Usuario" fullWidth margin="normal" value={form.username} onChange={handleChange} required />
-          <TextField name="email" label="Correo electrónico" type="email" fullWidth margin="normal" value={form.email} onChange={handleChange} required />
-          <TextField name="password" label="Contraseña" type="password" fullWidth margin="normal" value={form.password} onChange={handleChange} required />
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>REGISTRARSE</Button>
+          <TextField 
+            name="username" 
+            label="Usuario" 
+            fullWidth 
+            margin="normal" 
+            size={isMobile ? "small" : "medium"}
+            value={form.username} 
+            onChange={handleChange} 
+            required 
+          />
+          <TextField 
+            name="email" 
+            label="Correo electrónico" 
+            type="email" 
+            fullWidth 
+            margin="normal" 
+            size={isMobile ? "small" : "medium"}
+            value={form.email} 
+            onChange={handleChange} 
+            required 
+          />
+          <TextField 
+            name="password" 
+            label="Contraseña" 
+            type="password" 
+            fullWidth 
+            margin="normal" 
+            size={isMobile ? "small" : "medium"}
+            value={form.password} 
+            onChange={handleChange} 
+            required 
+          />
+          <Button 
+            type="submit" 
+            variant="contained" 
+            fullWidth 
+            sx={{ mt: 2, py: isMobile ? 1 : 1.5 }}
+            size={isMobile ? "medium" : "large"}
+          >
+            REGISTRARSE
+          </Button>
           <Box textAlign="center" mt={2}>
-            <Typography variant="body2"><Link to="/login">¿Ya tiene cuenta? Inicie sesión</Link></Typography>
+            <Typography variant={isMobile ? "caption" : "body2"}>
+              <Link to="/login">¿Ya tiene cuenta? Inicie sesión</Link>
+            </Typography>
           </Box>
         </form>
       </Paper>
