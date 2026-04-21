@@ -1,17 +1,17 @@
 services:
-  # Servicio de base de datos PostgreSQL
+  # Base de datos PostgreSQL
   - type: pserv
     name: clientes-db
     plan: free
     region: oregon
 
-  # Servicio backend
+  # Backend API
   - type: web
     name: clientes-backend
     runtime: image
     plan: free
     region: oregon
-    dockerfilePath: ./backend/Dockerfile  # <-- Especificar ruta
+    dockerfilePath: ./backend/Dockerfile
     repo: https://github.com/racielfg01/clientes-app
     branch: main
     envVars:
@@ -27,13 +27,13 @@ services:
         value: 5000
     healthCheckPath: /health
 
-  # Servicio frontend
+  # Frontend
   - type: web
     name: clientes-frontend
     runtime: image
     plan: free
     region: oregon
-    dockerfilePath: ./frontend/Dockerfile  # <-- Especificar ruta
+    dockerfilePath: ./frontend/Dockerfile
     repo: https://github.com/racielfg01/clientes-app
     branch: main
     envVars:
