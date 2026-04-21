@@ -1,4 +1,4 @@
-# Dockerfile para Render - Construye backend y frontend
+# Dockerfile para Render - Corregido
 
 # Etapa 1: Construir el frontend
 FROM node:18-alpine AS frontend-builder
@@ -7,26 +7,29 @@ WORKDIR /app/frontend
 
 # Copiar archivos del frontend
 COPY frontend/package*.json ./
-RUN npm install --legacy-peer-deps
+RUN npm ci --only=production || npm install
 
 COPY frontend/ ./
-RUN npm run build
+RUN CI=false npm run build
 
 # Etapa 2: Configurar el backend
 FROM node:18-alpine
 
-WORKDIR /app
-
-# Copiar backend
-COPY backend/package*.json ./backend/
+# Establecer directorio de trabajo directamente en backend
 WORKDIR /app/backend
-RUN npm install
 
-# Copiar código del backend
-COPY backend/ ./backend/
+# Copiar archivos del backend
+COPY backend/package*.json ./
+RUN npm ci --only=production || npm install
+
+# Copiar el resto del backend
+COPY backend/ ./
 
 # Copiar el frontend construido
-COPY --from=frontend-builder /app/frontend/build /app/backend/public
+COPY --from=frontend-builder /app/frontend/build ./public
+
+# Verificar que server.js existe
+RUN test -f server.js || (echo "server.js not found in $(pwd)" && ls -la && exit 1)
 
 # Variables de entorno
 ENV NODE_ENV=production
@@ -35,6 +38,5 @@ ENV PORT=5000
 # Exponer puerto
 EXPOSE 5000
 
-# Iniciar el servidor
-WORKDIR /app/backend
+# Iniciar el servidor (ahora server.js está en el directorio actual)
 CMD ["node", "server.js"]
