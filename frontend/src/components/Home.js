@@ -4,7 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { 
   AppBar, Toolbar, Typography, Button, Drawer, List, 
   ListItem, ListItemText, Box, IconButton, useMediaQuery, 
-  useTheme, Avatar, Menu, MenuItem 
+  useTheme, Avatar, Menu, MenuItem, 
+  Paper
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
