@@ -4,27 +4,33 @@ const jwt = require('jsonwebtoken');
 const pool = require('../db');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this';
+const JWT_SECRET = process.env.JWT_SECRET || 'mi-secreto-local-2024';
 
 // Registro
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
 
+  // Validaciones
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Email inválido' });
+  }
+
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$/;
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({ 
+      message: 'La contraseña debe tener 8-20 caracteres, una mayúscula, una minúscula y un número' 
+    });
+  }
+
   try {
-    // Validar contraseña
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$/;
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({ 
-        message: 'La contraseña debe tener 8-20 caracteres, una mayúscula, una minúscula y un número' 
-      });
-    }
-
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Insertar usuario
     const result = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id',
+      'INSERT INTO users (id, username, email, password) VALUES (gen_random_uuid(), $1, $2, $3) RETURNING id',
       [username, email, hashedPassword]
     );
 
@@ -36,6 +42,7 @@ router.post('/register', async (req, res) => {
     if (error.code === '23505') {
       res.status(400).json({ message: 'El usuario o email ya existe' });
     } else {
+      console.error(error);
       res.status(500).json({ message: 'Error al crear usuario' });
     }
   }
@@ -44,6 +51,10 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Usuario y contraseña son obligatorios' });
+  }
 
   try {
     const result = await pool.query(
@@ -75,6 +86,7 @@ router.post('/login', async (req, res) => {
       username: user.username
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 });

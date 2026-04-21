@@ -9,12 +9,15 @@ require('dotenv').config();
 //  port: process.env.DB_PORT || 5432,
 //});
 
+// Configuración para Render (usa DATABASE_URL automáticamente)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || process.env.DB_URL,
-  ssl: {
-    rejectUnauthorized: false // Railway requiere SSL
-  }
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
+
 
 const initDB = async () => {
   try {
