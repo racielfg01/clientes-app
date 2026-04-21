@@ -5,15 +5,18 @@ import { getInterests } from '../services/interestService';
 import { getClientById, createClient, updateClient } from '../services/clientService';
 import {
   Container, TextField, Button, Typography, Box, Grid, MenuItem, 
-  FormControl, InputLabel, Select, Paper, Snackbar, Alert, CircularProgress
+  FormControl, InputLabel, Select, Paper, Snackbar, Alert, CircularProgress,useMediaQuery,useTheme
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ClientForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const theme = useTheme();
   const { userId, token } = useAuth();
   const [interests, setInterests] = useState([]);
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
