@@ -1,27 +1,42 @@
-# Exported from Render on 2026-04-21T15:40:53Z
-version: "1"
-projects:
-- name: My project
-  environments:
-  - name: Production
-    services:
-    - type: web
-      name: clientes-app
-      runtime: docker
-      repo: https://github.com/racielfg01/clientes-app
-      plan: free
-      envVars:
-      - key: REACT_APP_API_URL
-        sync: false
+services:
+  # Servicio de base de datos PostgreSQL
+  - type: pserv
+    name: clientes-db
+    plan: free
+    region: oregon
+
+  # Servicio backend
+  - type: web
+    name: clientes-backend
+    runtime: image
+    plan: free
+    region: oregon
+    dockerfilePath: ./backend/Dockerfile  # <-- Especificar ruta
+    repo: https://github.com/racielfg01/clientes-app
+    branch: main
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: clientes-db
+          property: connectionString
       - key: JWT_SECRET
-        sync: false
-      - key: DB_NAME
-        sync: false
-      - key: DB_PASSWORD
-        sync: false
-      - key: DB_USER
-        sync: false
-      region: oregon
-      dockerContext: .
-      dockerfilePath: ./Dockerfile
-      autoDeployTrigger: commit
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+    healthCheckPath: /health
+
+  # Servicio frontend
+  - type: web
+    name: clientes-frontend
+    runtime: image
+    plan: free
+    region: oregon
+    dockerfilePath: ./frontend/Dockerfile  # <-- Especificar ruta
+    repo: https://github.com/racielfg01/clientes-app
+    branch: main
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://clientes-backend.onrender.com/api
+    healthCheckPath: /
