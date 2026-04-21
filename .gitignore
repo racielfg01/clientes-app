@@ -1,47 +1,13 @@
-# Dependencies
-node_modules/
+node_modules
 npm-debug.log
-yarn-error.log
-
-# Environment variables
 .env
-.env.local
-.env.production
-
-# Build
-build/
-dist/
-.next/
-out/
-
-# Docker
+.git
+.gitignore
+README.md
 .dockerignore
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-logs/
+backend/node_modules
+frontend/node_modules
+backend/public
 *.log
-
-# Runtime data
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# nyc test coverage
-.nyc_output/
-
-# Optional eslint cache
-.eslintcache
+.DS_Store
+EOF

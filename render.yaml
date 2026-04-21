@@ -5,13 +5,13 @@ services:
     plan: free
     region: oregon
 
-  # Backend API
+  # Servicio web (backend + frontend)
   - type: web
-    name: clientes-backend
+    name: clientes-app
     runtime: image
     plan: free
     region: oregon
-    dockerfilePath: ./backend/Dockerfile
+    dockerfilePath: ./Dockerfile
     repo: https://github.com/racielfg01/clientes-app
     branch: main
     envVars:
@@ -23,20 +23,5 @@ services:
         generateValue: true
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
     healthCheckPath: /health
-
-  # Frontend
-  - type: web
-    name: clientes-frontend
-    runtime: image
-    plan: free
-    region: oregon
-    dockerfilePath: ./frontend/Dockerfile
-    repo: https://github.com/racielfg01/clientes-app
-    branch: main
-    envVars:
-      - key: REACT_APP_API_URL
-        value: https://clientes-backend.onrender.com/api
-    healthCheckPath: /
+    autoDeploy: true
